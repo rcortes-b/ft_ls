@@ -8,8 +8,10 @@
 #include <stdbool.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <errno.h>
 #include "../libft/libft.h"
 #include "../ft_printf/ft_printf.h"
+#include "err.h"
 
 typedef struct s_options {
 	bool	list;
@@ -25,5 +27,16 @@ typedef struct s_data {
 	char		**paths;
 	size_t		num_of_paths;
 }		t_data;
+
+/*
+* Error Functions
+*/
+void free_paths(char **paths, size_t amount);
+
+/*
+* Utils Functions
+*/
+void	set_option_value(t_data *data, char c);
+size_t	num_of_paths(int argc, char **argv);
 
 #endif

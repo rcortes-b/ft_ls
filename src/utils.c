@@ -1,2 +1,36 @@
-#include <stdlib.h>
+#include "../inc/utils.h"
 
+void	set_option_value(struct s_data *data, char c)
+{
+	switch (c) {
+		case 'l':
+					data->options.list = true;
+						break ;
+		case 'r':
+					data->options.reverse = true;
+					break ;
+		case 'R':
+					data->options.recursive = true;
+					break ;
+		case 'a':
+					data->options.all = true;
+					break ;
+		case 't':
+					data->options.time = true;
+					break ;
+		default:
+					write(2, "Invalid option.\n", 16);
+					free_paths(data->paths, data->num_of_paths);
+	}
+}
+
+size_t num_of_paths(int argc, char **argv)
+{
+	size_t counter = 0;
+	for (int i = 1; i < argc; i++)
+		if (*argv[i] != '-')
+			counter++;
+	if (!counter)
+		counter = 1;
+	return counter;
+}
