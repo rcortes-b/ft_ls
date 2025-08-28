@@ -16,6 +16,7 @@
         exit(1); \
     } while(0)
 
+void free_paths_exit(char **paths, size_t amount);
 void free_paths(char **paths, size_t amount);
 
 #endif

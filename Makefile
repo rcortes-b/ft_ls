@@ -4,9 +4,9 @@ CC = gcc
 FLAGS = -Wall -Wextra -Werror -g
 RM = rm -rf
 
-SRCS = src/ls.c src/list.c src/err.c src/utils.c
+SRCS = src/ls.c src/list.c src/err.c src/utils.c src/entries.c
 
-HEAD = inc/ls.h inc/list.h inc/err.h inc/utils.h
+HEAD = inc/ls.h inc/list.h inc/err.h inc/utils.h inc/entries.h
 
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)
@@ -18,7 +18,7 @@ all : make_libs $(NAME)
 	$(CC) $(FLAGS) -MMD -c $< -o $@
 
 make_libs:
-	make bonus -C libft
+	make -C libft
 	make -C ft_printf
 
 $(NAME): $(OBJS)

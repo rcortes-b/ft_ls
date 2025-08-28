@@ -1,4 +1,5 @@
 #include "../inc/ls.h"
+#include "../inc/entries.h"
 
 /*
 * -l, -R, -a, -r and -t
@@ -23,7 +24,7 @@ static void check_paths(struct s_data *input_data)
 	size_t	c = 0;
 	struct stat *restrict data = (struct stat *restrict)malloc(sizeof(*data));
 	if (!data)
-		free_paths(input_data->paths, input_data->num_of_paths);
+		free_paths_exit(input_data->paths, input_data->num_of_paths);
 
 	ft_memset(data, 0, sizeof(data));
 	for (; c < input_data->num_of_paths; c++) {
@@ -66,13 +67,13 @@ struct s_data parse_data(int argc, char **argv)
 		} else {
 			data.paths[counter++] = ft_strdup(argv[i]);
 			if (!data.paths[counter - 1])
-				free_paths(data.paths, data.num_of_paths);
+				free_paths_exit(data.paths, data.num_of_paths);
 		}
 	}
 	if (!counter) {
 		data.paths[counter++] = ft_strdup(".");
 		if (!data.paths[counter - 1])
-			free_paths(data.paths, data.num_of_paths);
+			free_paths_exit(data.paths, data.num_of_paths);
 		data.paths[counter] = NULL;
 	}
 	return data;
@@ -82,6 +83,8 @@ int main(int argc, char **argv)
 {
 	t_data	input_data = parse_data(argc, argv);
 	check_paths(&input_data);
+	t_list *lst = get_list(*input_data.paths);
+	(void)lst;
 	/*
 	* Dynamic Memory Allocated: input_data->paths ** and *
 	*/

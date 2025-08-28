@@ -20,7 +20,7 @@ void	set_option_value(struct s_data *data, char c)
 					break ;
 		default:
 					write(2, "Invalid option.\n", 16);
-					free_paths(data->paths, data->num_of_paths);
+					free_paths_exit(data->paths, data->num_of_paths);
 	}
 }
 

@@ -12,6 +12,7 @@
 #include "../libft/libft.h"
 #include "../ft_printf/ft_printf.h"
 #include "err.h"
+#include "list.h"
 
 typedef struct s_options {
 	bool	list;
@@ -31,7 +32,7 @@ typedef struct s_data {
 /*
 * Error Functions
 */
-void free_paths(char **paths, size_t amount);
+void free_paths_exit(char **paths, size_t amount);
 
 /*
 * Utils Functions
