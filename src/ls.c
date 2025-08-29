@@ -84,7 +84,17 @@ int main(int argc, char **argv)
 	t_data	input_data = parse_data(argc, argv);
 	check_paths(&input_data);
 	t_list *lst = get_list(*input_data.paths);
-	(void)lst;
+	iterate_dirs(&lst);
+	while (lst)
+	{
+		ft_printf("lst root: %s\n", lst->name);
+		while (lst->entries) {
+			ft_printf("%s ", lst->entries->name);
+			lst->entries = lst->entries->next;
+		}
+		ft_printf("\n\n");
+		lst = lst->next;
+	}
 	/*
 	* Dynamic Memory Allocated: input_data->paths ** and *
 	*/

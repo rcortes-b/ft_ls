@@ -30,7 +30,7 @@ clean :
 	$(RM) $(OBJS) $(DEPS)
 
 fclean: clean
-	make clean -C libft
+	make fclean -C libft
 	make fclean -C ft_printf
 	$(RM) $(NAME)
 

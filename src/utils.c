@@ -1,5 +1,13 @@
 #include "../inc/utils.h"
 
+bool	dir_is_valid(char *path)
+{
+	if ((!ft_strncmp("..", &path[ft_strlen(path) - 2], 2)) ||
+			(!ft_strncmp(".", &path[ft_strlen(path) - 1], 1)))
+			return false;
+	return true;
+}
+
 void	set_option_value(struct s_data *data, char c)
 {
 	switch (c) {
