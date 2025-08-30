@@ -4,9 +4,9 @@ CC = gcc
 FLAGS = -Wall -Wextra -Werror -g
 RM = rm -rf
 
-SRCS = src/ls.c src/list.c src/err.c src/utils.c src/entries.c
+SRCS = src/ls.c src/list.c src/err.c src/utils.c src/entries.c src/sort.c
 
-HEAD = inc/ls.h inc/list.h inc/err.h inc/utils.h inc/entries.h
+HEAD = inc/ls.h inc/list.h inc/err.h inc/utils.h inc/entries.h inc/sort.h
 
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)

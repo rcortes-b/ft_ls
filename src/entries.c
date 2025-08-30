@@ -1,43 +1,41 @@
 #include "../inc/entries.h"
 #include "../inc/list.h"
 #include "../inc/utils.h"
+#include "../inc/sort.h"
 
-t_entries *get_entries(DIR *root, char *root_path)
+t_entries *get_entries(DIR *root, char *root_path, t_options opt)
 {
 	struct dirent *entry;
 	t_entries *entries = NULL;
 	while ((entry = readdir(root)) != NULL) {
-		ft_printf("cmon %s\n", ft_pathjoin(root_path, entry->d_name));
-		add_entry_back(&entries, get_new_entry(entry->d_name, ft_pathjoin(root_path, entry->d_name), get_last_entry(entries)));
+		if (!opt.all && *entry->d_name == '.')
+			continue;
+		add_entry_back(&entries, get_new_entry(entry->d_name, ft_pathjoin(root_path, entry->d_name)));
 	}
+	merge_sort(&entries, opt);
 	return entries;
 }
 
-void	iterate_dirs(t_list **lst)
+void iterate_dirs(t_list **lst, t_options opt)
 {
-	t_list	*tmp_list;
-	t_list	*aux;
+	t_entries 	*aux;
+	t_list		*last;
 
-	tmp_list = *lst;
-	aux = *lst;
-	while (tmp_list) {
-		ft_printf("TMP_LIST: %s\n", tmp_list->name);
-		t_entries *tmp_entries = tmp_list->entries;
-		while (tmp_entries) {
-			ft_printf("TMP_ENTRIES: %s\n", tmp_entries->path);
-			if (tmp_entries->stat_data && S_ISDIR(tmp_entries->stat_data->st_mode) && dir_is_valid(tmp_entries->path)) {
-				ft_printf("tmp_entries_path: %s\n", tmp_entries->path);
-				tmp_list->next = get_list(tmp_entries->name);
-				tmp_list = tmp_list->next;
-			}
-			tmp_entries = tmp_entries->next;
+	aux = (*lst)->entries;
+	while (aux) {
+		if (aux->stat_data && S_ISDIR(aux->stat_data->st_mode) && dir_is_valid(aux->path)) {
+			last = *lst;
+			while (last->next)
+				last = last->next;
+			last->next = get_list(aux->path, opt);
+			iterate_dirs(&last->next, opt);
 		}
 		aux = aux->next;
-		tmp_list = aux;
 	}
+	
 }
 
-t_list *get_list(char *root)
+t_list *get_list(char *root, t_options opt)
 {
 	t_list	*new_lst = (t_list*)malloc(sizeof(new_lst));
 	if (!new_lst)
@@ -52,15 +50,7 @@ t_list *get_list(char *root)
 		return NULL;
 	}
 	new_lst->next = NULL;
-	new_lst->entries = get_entries(new_lst->root, root);
-	/*while (new_lst->entries) {
-		ft_printf("%s ", new_lst->entries->name);
-		if (new_lst->entries->prev)
-			ft_printf("%s\n", new_lst->entries->prev->name);
-		else
-			ft_printf("\n");
-		new_lst->entries = new_lst->entries->next;
-	}
-	ft_printf("\n");*/
+	new_lst->entries = get_entries(new_lst->root, root, opt);
+
 	return new_lst;
 } 

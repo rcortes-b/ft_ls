@@ -1,18 +1,17 @@
 #include "../inc/list.h"
 
-t_entries *get_new_entry(char *name, char *path, t_entries *last)
+t_entries *get_new_entry(char *name, char *path)
 {
 	t_entries *entries = (t_entries *)malloc(sizeof(t_entries));
 	if (!entries)
 		MALLOC_ERR();
 	entries->name = ft_strdup(name);
-	ft_printf("PATH %s\n", path);
+	//ft_printf("PATH %s\n", path);
 	entries->path = path;
-	entries->prev = last;
 	entries->next = NULL;
 	entries->stat_data = (struct stat *)malloc(sizeof(struct stat));
 
-	int ret = stat(entries->name, entries->stat_data);
+	int ret = stat(entries->path, entries->stat_data);
 	if (ret < 0) {
 	//	ft_printf("edfs %s\n", entries->name);
 		/*

@@ -83,8 +83,19 @@ int main(int argc, char **argv)
 {
 	t_data	input_data = parse_data(argc, argv);
 	check_paths(&input_data);
-	t_list *lst = get_list(*input_data.paths);
-	iterate_dirs(&lst);
+	t_list *lst;
+	t_list *tmp;
+	lst = get_list(*input_data.paths, input_data.options);
+	iterate_dirs(&lst, input_data.options);
+	for (size_t i = 1; i < input_data.num_of_paths; i++) {
+		tmp = lst;
+		if (input_data.paths[i]) {
+			while (tmp->next)
+				tmp = tmp->next;
+			tmp->next = get_list(input_data.paths[i], input_data.options);
+			iterate_dirs(&tmp->next, input_data.options);
+		}
+	}
 	while (lst)
 	{
 		ft_printf("lst root: %s\n", lst->name);
