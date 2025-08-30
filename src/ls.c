@@ -1,5 +1,6 @@
 #include "../inc/ls.h"
 #include "../inc/entries.h"
+#include "../inc/print.h"
 
 /*
 * -l, -R, -a, -r and -t
@@ -96,16 +97,7 @@ int main(int argc, char **argv)
 			iterate_dirs(&tmp->next, input_data.options);
 		}
 	}
-	while (lst)
-	{
-		ft_printf("lst root: %s\n", lst->name);
-		while (lst->entries) {
-			ft_printf("%s ", lst->entries->name);
-			lst->entries = lst->entries->next;
-		}
-		ft_printf("\n\n");
-		lst = lst->next;
-	}
+	print_list(lst, input_data.options, input_data.num_of_paths);
 	/*
 	* Dynamic Memory Allocated: input_data->paths ** and *
 	*/

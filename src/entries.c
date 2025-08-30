@@ -21,6 +21,8 @@ void iterate_dirs(t_list **lst, t_options opt)
 	t_entries 	*aux;
 	t_list		*last;
 
+	if (!opt.recursive)
+		return ;
 	aux = (*lst)->entries;
 	while (aux) {
 		if (aux->stat_data && S_ISDIR(aux->stat_data->st_mode) && dir_is_valid(aux->path)) {
@@ -45,12 +47,12 @@ t_list *get_list(char *root, t_options opt)
 	*/
 	new_lst->name = ft_strdup(root);
 	new_lst->root = opendir(root);
+
 	if (!new_lst->root) {
 		strerror(errno);
 		return NULL;
 	}
 	new_lst->next = NULL;
 	new_lst->entries = get_entries(new_lst->root, root, opt);
-
 	return new_lst;
 } 
