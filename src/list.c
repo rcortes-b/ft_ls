@@ -45,6 +45,15 @@ t_entries *get_last_entry(t_entries *lst)
 	return (lst);
 }
 
+t_list *get_last_list(t_list *lst)
+{
+	if (!lst)
+		return NULL;
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
+}
+
 t_entries	*add_entry_back(t_entries **lst, t_entries *new)
 {
 	t_entries	*tmp;

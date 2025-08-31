@@ -18,8 +18,9 @@ typedef struct s_list {
 	struct s_list	*next;
 }	t_list;
 
-t_entries *get_new_entry(char *name, char *path);
+t_entries	*get_new_entry(char *name, char *path);
 t_entries	*get_last_entry(t_entries *lst);
 t_entries	*add_entry_back(t_entries **lst, t_entries *new);
+t_list		*get_last_list(t_list *lst);
 
  #endif

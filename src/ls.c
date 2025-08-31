@@ -85,27 +85,24 @@ struct s_data parse_data(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-	t_list *lst, *tmp;
+	t_list *lst, *tmp, *value;
 	t_data input_data;	
+
 	input_data = parse_data(argc, argv);
 	check_input(&input_data);
 
-	lst = get_list(*input_data.paths, input_data.options);
-	if (!lst)
-		free_paths_exit(input_data.paths, input_data.num_of_paths);
-	if (!iterate_dirs(&lst, input_data.options))
-		FREE_AND_EXIT(&lst, input_data.paths, input_data.num_of_paths);
-	free(*input_data.paths);
-	*input_data.paths = NULL;
-	for (size_t i = 1; i < input_data.num_of_paths; i++) {
-		tmp = lst;
+	lst = NULL;
+	for (size_t i = 0; i < input_data.num_of_paths; i++) {
 		if (input_data.paths[i]) {
-			while (tmp->next)
-				tmp = tmp->next;
-			tmp->next = get_list(input_data.paths[i], input_data.options);
-			if (!tmp->next)
+			tmp = get_last_list(lst);
+			value = get_list(input_data.paths[i], input_data.options);
+			if (!value)
 				FREE_AND_EXIT(&lst, input_data.paths, input_data.num_of_paths);
-			if (!iterate_dirs(&tmp->next, input_data.options))
+			if (!lst)
+				lst = value;
+			else
+				tmp->next = value;
+			if (!iterate_dirs(&value, input_data.options))
 				FREE_AND_EXIT(&lst, input_data.paths, input_data.num_of_paths);
 			free(input_data.paths[i]);
 			input_data.paths[i] = NULL;

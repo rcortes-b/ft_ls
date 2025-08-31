@@ -78,14 +78,18 @@ static void	print_entry_as_list(t_entries *entry)
 	ft_printf("%s ", getgrgid(entry->stat_data->st_gid)->gr_name);
 	ft_printf("%d ", entry->stat_data->st_size);
 	ft_printf("%s ", modify_date(ctime(&entry->stat_data->st_mtime)));
-	ft_printf("%s\n", entry->name);
+	ft_printf("%s", entry->name);
+	if (entry->next)
+		ft_printf("\n");
 
 }
 
 void	print_list(struct s_list **list, t_options opt, size_t amount)
 {
-	t_list *lst = *list;
+	t_list *lst;
 	t_entries *entry;
+
+	lst = *list;
 	while (lst) {
 		if (opt.recursive || amount > 1)
 			ft_printf("%s:\n", lst->name);
@@ -99,10 +103,9 @@ void	print_list(struct s_list **list, t_options opt, size_t amount)
 				print_entry_as_list(entry);
 			entry = entry->next;
 		}
-		if (!opt.list)
-			ft_printf("\n");
-		if (opt.recursive)
-			ft_printf("\n");
+		write(1, "\n", 1);
+		if (lst->next)
+			write(1, "\n", 1);
 		lst = lst->next;
 	}
 }
