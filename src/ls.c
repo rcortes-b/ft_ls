@@ -39,24 +39,28 @@ static void init_data(struct s_data *data)
 	data->num_of_paths = 0;
 }
 
-static void check_paths(struct s_data *input_data)
+static void check_input(struct s_data *input_data)
 {
 	int 	ret = 0;
 	bool	bad_path = false;
 	size_t	c = 0;
-	struct stat *restrict data = (struct stat *restrict)malloc(sizeof(*data));
+	struct stat *restrict data;
+
+	data = (struct stat *restrict)malloc(sizeof(*data));
 	if (!data)
 		free_paths_exit(input_data->paths, input_data->num_of_paths);
-
 	ft_memset(data, 0, sizeof(data));
-	for (; c < input_data->num_of_paths; c++) {
+
+	while (c < input_data->num_of_paths)
+	{
 		ret = stat(input_data->paths[c], data);
 		if (ret) {
-			ft_printf("ft_ls: cannot access %s: No such file or directory\n", input_data->paths[c]);
+			ft_printf("ft_ls: cannot access '%s': No such file or directory\n", input_data->paths[c]);
 			free(input_data->paths[c]);
 			input_data->paths[c] = NULL;
 			bad_path = true;
 		}
+		c++;
 	}
 	free(data);
 	if (bad_path) {
@@ -72,8 +76,10 @@ static void check_paths(struct s_data *input_data)
 struct s_data parse_data(int argc, char **argv)
 {
 	t_data	data;
+	size_t counter;
+
 	init_data(&data);
-	size_t counter = num_of_paths(argc, argv);
+	counter = num_of_paths(argc, argv);
 	data.num_of_paths = counter;
 	data.paths = (char**)malloc(sizeof(char*) * (counter + 1));
 	*data.paths = NULL;
@@ -103,12 +109,15 @@ struct s_data parse_data(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-	t_data	input_data = parse_data(argc, argv);
-	check_paths(&input_data);
-	t_list *lst;
-	t_list *tmp;
+	t_list *lst, *tmp;
+	t_data input_data;	
+	input_data = parse_data(argc, argv);
+	check_input(&input_data);
+
 	lst = get_list(*input_data.paths, input_data.options);
+	//if !lst
 	iterate_dirs(&lst, input_data.options);
+	free(*input_data.paths);
 	for (size_t i = 1; i < input_data.num_of_paths; i++) {
 		tmp = lst;
 		if (input_data.paths[i]) {
@@ -119,7 +128,6 @@ int main(int argc, char **argv)
 			free(input_data.paths[i]);
 		}
 	}
-	free(*input_data.paths);
 	free(input_data.paths);
 	print_list(&lst, input_data.options, input_data.num_of_paths);
 	free_data(&lst);

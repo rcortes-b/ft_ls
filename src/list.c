@@ -2,27 +2,37 @@
 
 t_entries *get_new_entry(char *name, char *path)
 {
+	if (!path)
+		return NULL;
 	t_entries *entries = (t_entries *)malloc(sizeof(t_entries));
-	if (!entries)
+	if (!entries) {
+		free(path);
 		MALLOC_ERR();
+	}
 	entries->name = ft_strdup(name);
-	//ft_printf("PATH %s\n", path);
+	if (!entries->name) {
+		free(path);
+		free(entries);
+		return NULL;
+	}
 	entries->path = path;
 	entries->next = NULL;
 	entries->stat_data = (struct stat *)malloc(sizeof(struct stat));
-
+	if (!entries->stat_data) {
+		free(path);
+		free(entries);
+		free(entries->name);
+		return NULL;
+	}
 	int ret = stat(entries->path, entries->stat_data);
 	if (ret < 0) {
-	//	ft_printf("edfs %s\n", entries->name);
-		/*
-		* Review this error
-		*/
-	//write(2, "Stat error\n", 11);
+		free(path);
+		free(entries);
+		free(entries->name);
+		free(entries->stat_data);
 		entries->stat_data = NULL;
-	} else {
-	//	ft_printf("%s\n", entries->name);
+		return NULL;
 	}
-
 	return entries;
 }
 
@@ -35,12 +45,12 @@ t_entries *get_last_entry(t_entries *lst)
 	return (lst);
 }
 
-void	add_entry_back(t_entries **lst, t_entries *new)
+t_entries	*add_entry_back(t_entries **lst, t_entries *new)
 {
 	t_entries	*tmp;
 
 	if (!new)
-		return ;
+		return NULL;
 	if (*lst == NULL)
 	{
 		*lst = new;
@@ -49,4 +59,5 @@ void	add_entry_back(t_entries **lst, t_entries *new)
 	tmp = *lst;
 	tmp = get_last_entry(tmp);
 	tmp->next = new;
+	return new;
 }

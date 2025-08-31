@@ -20,6 +20,6 @@ typedef struct s_list {
 
 t_entries *get_new_entry(char *name, char *path);
 t_entries	*get_last_entry(t_entries *lst);
-void		add_entry_back(t_entries **lst, t_entries *new);
+t_entries	*add_entry_back(t_entries **lst, t_entries *new);
 
  #endif

@@ -101,7 +101,7 @@ void	print_list(struct s_list **list, t_options opt, size_t amount)
 		}
 		if (!opt.list)
 			ft_printf("\n");
-		if (opt.recursive || amount > 1)
+		if (opt.recursive)
 			ft_printf("\n");
 		lst = lst->next;
 	}
