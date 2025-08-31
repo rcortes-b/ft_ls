@@ -54,7 +54,7 @@ t_entries	*add_entry_back(t_entries **lst, t_entries *new)
 	if (*lst == NULL)
 	{
 		*lst = new;
-		return ;
+		return new;
 	}
 	tmp = *lst;
 	tmp = get_last_entry(tmp);

@@ -17,13 +17,13 @@ t_entries *get_entries(DIR *root, char *root_path, t_options opt)
 	return entries;
 }
 
-void iterate_dirs(t_list **lst, t_options opt)
+t_list *iterate_dirs(t_list **lst, t_options opt)
 {
 	t_entries 	*aux;
 	t_list		*last;
 
 	if (!opt.recursive)
-		return ;
+		return *lst;
 	aux = (*lst)->entries;
 	while (aux) {
 		if (aux->stat_data && S_ISDIR(aux->stat_data->st_mode) && dir_is_valid(aux->path)) {
@@ -31,24 +31,21 @@ void iterate_dirs(t_list **lst, t_options opt)
 			while (last->next)
 				last = last->next;
 			last->next = get_list(aux->path, opt);
-			/*
-			* Free everything and NULL to keep freeing the head list;
-			*/
-			iterate_dirs(&last->next, opt);
+			if (!last->next)
+				return NULL;
+			if (!iterate_dirs(&last->next, opt))
+				return NULL;
 		}
 		aux = aux->next;
 	}
-	
+	return *lst;
 }
 
 t_list *get_list(char *root, t_options opt)
 {
 	t_list	*new_lst = (t_list*)malloc(sizeof(t_list));
 	if (!new_lst)
-		MALLOC_ERR();
-	/*
-	* Error check
-	*/
+		return NULL;
 	new_lst->name = ft_strdup(root);
 	if (!new_lst->name) {
 		free(new_lst);

@@ -72,7 +72,7 @@ static blkcnt_t get_total_block_size(t_entries *entries)
 
 static void	print_entry_as_list(t_entries *entry)
 {
-	ft_printf("%s ", get_mode(entry->stat_data->st_mode)); //mode format
+	ft_printf("%s ", get_mode(entry->stat_data->st_mode));
 	ft_printf("%d ", entry->stat_data->st_nlink);
 	ft_printf("%s ", getpwuid(entry->stat_data->st_uid)->pw_name);
 	ft_printf("%s ", getgrgid(entry->stat_data->st_gid)->gr_name);

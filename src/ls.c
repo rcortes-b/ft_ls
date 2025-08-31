@@ -1,31 +1,7 @@
 #include "../inc/ls.h"
 #include "../inc/entries.h"
 #include "../inc/print.h"
-
-/*
-* -l, -R, -a, -r and -t
-*/
-
-static void free_data(struct s_list **lst)
-{
-	t_entries	*save_ent;
-	t_list		*save_lst;
-	while (*lst) {
-		while ((*lst)->entries) {
-			save_ent = (*lst)->entries;
-			(*lst)->entries = (*lst)->entries->next;
-			free(save_ent->name);
-			free(save_ent->path);
-			free(save_ent->stat_data);
-			free(save_ent);
-		}
-		save_lst = *lst;
-		*lst = (*lst)->next;
-		free(save_lst->name);
-		free(save_lst->root);
-		free(save_lst);
-	}
-}
+#include "../inc/err.h"
 
 static void init_data(struct s_data *data)
 {
@@ -115,29 +91,29 @@ int main(int argc, char **argv)
 	check_input(&input_data);
 
 	lst = get_list(*input_data.paths, input_data.options);
-	//if !lst
-	iterate_dirs(&lst, input_data.options);
+	if (!lst)
+		free_paths_exit(input_data.paths, input_data.num_of_paths);
+	if (!iterate_dirs(&lst, input_data.options))
+		FREE_AND_EXIT(&lst, input_data.paths, input_data.num_of_paths);
 	free(*input_data.paths);
+	*input_data.paths = NULL;
 	for (size_t i = 1; i < input_data.num_of_paths; i++) {
 		tmp = lst;
 		if (input_data.paths[i]) {
 			while (tmp->next)
 				tmp = tmp->next;
 			tmp->next = get_list(input_data.paths[i], input_data.options);
-			iterate_dirs(&tmp->next, input_data.options);
+			if (!tmp->next)
+				FREE_AND_EXIT(&lst, input_data.paths, input_data.num_of_paths);
+			if (!iterate_dirs(&tmp->next, input_data.options))
+				FREE_AND_EXIT(&lst, input_data.paths, input_data.num_of_paths);
 			free(input_data.paths[i]);
+			input_data.paths[i] = NULL;
 		}
 	}
 	free(input_data.paths);
 	print_list(&lst, input_data.options, input_data.num_of_paths);
 	free_data(&lst);
-	/*
-	* Dynamic Memory Allocated: input_data->paths ** and *
-	*/
-
-	/*
-	* At the time of the paths loop check if there is a null to skip it!
-	*/
 
 	return 0;
 }
