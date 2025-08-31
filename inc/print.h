@@ -11,6 +11,16 @@
 
 #define WIDTH 180
 
-void	print_list(struct s_list **list, t_options opt, size_t amount);
+struct s_options;
+typedef struct s_list t_list;
+
+typedef struct s_padding {
+	size_t	nlink;
+	size_t	pwusize;
+	size_t	grpsize;
+	size_t	filesize;
+}	t_padding;
+
+void	print_list(struct s_list **list, struct s_options opt, size_t amount);
 
 #endif

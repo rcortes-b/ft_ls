@@ -53,3 +53,13 @@ int		ft_strcmp(char *s1, char *s2)
 	}
 	return (*s1 - *s2);
 }
+
+size_t	number_len(int value)
+{
+	size_t counter = 1;
+	while (value / 10 != 0) {
+		value /= 10;
+		counter++;
+	}
+	return counter;
+}

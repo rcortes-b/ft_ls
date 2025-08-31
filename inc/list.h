@@ -1,8 +1,9 @@
 #ifndef LIST_H
 # define LIST_H
 
-#include "ls.h"
 #include <sys/stat.h>
+#include "ls.h"
+#include "print.h"
 
 typedef struct s_entries {
 	char					*path;
