@@ -39,7 +39,7 @@ void iterate_dirs(t_list **lst, t_options opt)
 
 t_list *get_list(char *root, t_options opt)
 {
-	t_list	*new_lst = (t_list*)malloc(sizeof(new_lst));
+	t_list	*new_lst = (t_list*)malloc(sizeof(t_list));
 	if (!new_lst)
 		MALLOC_ERR();
 	/*

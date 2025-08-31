@@ -82,21 +82,25 @@ static void	print_entry_as_list(t_entries *entry)
 
 }
 
-void	print_list(struct s_list *lst, t_options opt, size_t amount)
+void	print_list(struct s_list **list, t_options opt, size_t amount)
 {
+	t_list *lst = *list;
+	t_entries *entry;
 	while (lst) {
 		if (opt.recursive || amount > 1)
 			ft_printf("%s:\n", lst->name);
 		if (opt.list)
 			ft_printf("total %d\n", get_total_block_size(lst->entries) / 2);
-		while (lst->entries) {
+		entry = lst->entries;
+		while (entry) {
 			if (!opt.list)
-				ft_printf("%s ", lst->entries->name);
+				ft_printf("%s ", entry->name);
 			else
-				print_entry_as_list(lst->entries);
-			lst->entries = lst->entries->next;
+				print_entry_as_list(entry);
+			entry = entry->next;
 		}
-		ft_printf("\n");
+		if (!opt.list)
+			ft_printf("\n");
 		if (opt.recursive || amount > 1)
 			ft_printf("\n");
 		lst = lst->next;

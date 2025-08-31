@@ -8,6 +8,6 @@
 #include "list.h"
 #include "ls.h"
 
-void	print_list(struct s_list *lst, t_options opt, size_t amount);
+void	print_list(struct s_list **list, t_options opt, size_t amount);
 
 #endif

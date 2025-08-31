@@ -18,7 +18,7 @@ t_entries *get_new_entry(char *name, char *path)
 		* Review this error
 		*/
 	//write(2, "Stat error\n", 11);
-	entries->stat_data = NULL;
+		entries->stat_data = NULL;
 	} else {
 	//	ft_printf("%s\n", entries->name);
 	}
