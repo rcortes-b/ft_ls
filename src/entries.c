@@ -3,13 +3,17 @@
 #include "../inc/utils.h"
 #include "../inc/sort.h"
 
-t_entries *get_entries(DIR *root, char *root_path, t_options opt)
+t_entries *get_entries(DIR *root, char *root_path, t_options opt, size_t *sz)
 {
 	struct dirent *entry;
+	size_t len;
 	t_entries *entries = NULL;
 	while ((entry = readdir(root)) != NULL) {
 		if (!opt.all && *entry->d_name == '.')
 			continue;
+		len = ft_strlen(entry->d_name);
+		if (len > *sz)
+			*sz = len;
 		if (!add_entry_back(&entries, get_new_entry(entry->d_name, ft_pathjoin(root_path, entry->d_name))))
 			return NULL;
 	}
@@ -58,7 +62,8 @@ t_list *get_list(char *root, t_options opt)
 		return NULL;
 	}
 	new_lst->next = NULL;
-	new_lst->entries = get_entries(new_lst->root, root, opt);
+	new_lst->highest_nsize = 0;
+	new_lst->entries = get_entries(new_lst->root, root, opt, &new_lst->highest_nsize);
 	if (!new_lst->entries) {
 		free(new_lst->name);
 		free(new_lst->root);

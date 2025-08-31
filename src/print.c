@@ -1,5 +1,4 @@
 #include "../inc/print.h"
-#include <time.h>
 
 static char *modify_date(char *date)
 {
@@ -84,10 +83,26 @@ static void	print_entry_as_list(t_entries *entry)
 
 }
 
+static void print_entry(char *str, size_t *counter, size_t max_size)
+{
+	size_t padding;
+	padding = max_size - ft_strlen(str);
+	if (WIDTH / max_size == *counter) {
+		write(1, "\n", 1);
+		*counter = 0;
+	}
+	ft_printf("%s", str);
+	while (padding-- > 0)
+		write(1, " ", 1);
+	
+	*counter += 1;
+}
+
 void	print_list(struct s_list **list, t_options opt, size_t amount)
 {
-	t_list *lst;
-	t_entries *entry;
+	t_list		*lst;
+	t_entries	*entry;
+	size_t		counter;
 
 	lst = *list;
 	while (lst) {
@@ -96,9 +111,11 @@ void	print_list(struct s_list **list, t_options opt, size_t amount)
 		if (opt.list)
 			ft_printf("total %d\n", get_total_block_size(lst->entries) / 2);
 		entry = lst->entries;
+		lst->highest_nsize += 2;
+		counter = 0;
 		while (entry) {
 			if (!opt.list)
-				ft_printf("%s ", entry->name);
+				print_entry(entry->name, &counter, lst->highest_nsize);
 			else
 				print_entry_as_list(entry);
 			entry = entry->next;

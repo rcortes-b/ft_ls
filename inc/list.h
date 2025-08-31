@@ -13,6 +13,7 @@ typedef struct s_entries {
 
 typedef struct s_list {
 	char			*name;
+	size_t			highest_nsize;
 	DIR				*root;
 	t_entries		*entries;
 	struct s_list	*next;
