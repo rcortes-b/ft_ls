@@ -36,7 +36,7 @@ size_t num_of_paths(int argc, char **argv)
 {
 	size_t counter = 0;
 	for (int i = 1; i < argc; i++)
-		if (*argv[i] != '-')
+		if (*argv[i] != '-' || (ft_strlen(argv[i]) == 1 && *argv[i] == '-'))
 			counter++;
 	if (!counter)
 		counter = 1;

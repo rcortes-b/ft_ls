@@ -58,12 +58,12 @@ struct s_data parse_data(int argc, char **argv)
 	counter = num_of_paths(argc, argv);
 	data.num_of_paths = counter;
 	data.paths = (char**)malloc(sizeof(char*) * (counter + 1));
-	*data.paths = NULL;
 	if (!data.paths)
 		MALLOC_ERR_EXIT();
+	*data.paths = NULL;
 	counter = 0;
 	for (int i = 1; i < argc; i++) {
-		if (*argv[i] == '-') {
+		if (ft_strlen(argv[i]) > 1 && *argv[i] == '-') {
 			data.options_set = true;
 			for (size_t j = 1; argv[i][j]; j++) {
 				set_option_value(&data, argv[i][j]);
