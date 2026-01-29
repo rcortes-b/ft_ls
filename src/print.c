@@ -83,9 +83,9 @@ static void	print_entry_as_list(t_entries *entry, t_padding w_padding)
 	padding = w_padding.pwusize - ft_strlen(getpwuid(entry->stat_data->st_uid)->pw_name);
 	while (padding-- > 0)
 		write(1, " ", 1);
-	ft_printf("%s ", getgrgid(entry->stat_data->st_gid)->gr_name);
+	ft_printf("%s ", getpwuid(entry->stat_data->st_uid)->pw_name);
 
-	padding = w_padding.pwusize - ft_strlen(getpwuid(entry->stat_data->st_uid)->pw_name);
+	padding = w_padding.grpsize - ft_strlen(getgrgid(entry->stat_data->st_gid)->gr_name);
 	while (padding-- > 0)
 		write(1, " ", 1);
 	ft_printf("%s ", getgrgid(entry->stat_data->st_gid)->gr_name);
